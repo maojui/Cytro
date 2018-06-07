@@ -1,0 +1,2 @@
+python3 setup.py install
+/usr/local/anaconda3/bin/pytest $1

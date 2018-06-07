@@ -1,0 +1,3 @@
+hashpumpy==1.2
+pycrypto==2.6.1
+pillow==4.3.0
