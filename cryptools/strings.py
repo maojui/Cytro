@@ -16,14 +16,14 @@ def len_in_bits(n):
 def hex2bytes(s):
     return binascii.unhexlify(s)
 
-def s2hex(s):
+def s2h(s):
     if type(s) == str :
         s = switchBS(s) 
     return binascii.hexlify(s)
 
 def byte(x):
     s = io.BytesIO()
-    s.write( bytearray( (x,) ) )
+    s.write(bytearray((x,)))
     return s.getvalue()
 
 def s2n(s):
@@ -41,8 +41,8 @@ def n2s(n,byteorder='big'):
     """
     Number to string.
     """
-    length = (len(hex(n))-1)//2
-    return int(n).to_bytes(length=length,byteorder=byteorder)
+    length = (len(hex(n)) - 1) // 2
+    return int(n).to_bytes(length=length, byteorder=byteorder)
 
 def s2b(s):
     """
