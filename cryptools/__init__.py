@@ -14,7 +14,3 @@ from .stuff import *
 from .rootmod import *
 from .strings import *
 from .LEA import *
-
-__author__ = "Neptune (bearbear9117@gmail.com)"
-__license__ = "MIT"
-__version__ = "0.2.1"
