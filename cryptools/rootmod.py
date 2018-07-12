@@ -4,7 +4,7 @@ import operator
 import subprocess
 import os
 from itertools import product
-from .common import *
+
 from .modular import *
 from .stuff import sageworks
 

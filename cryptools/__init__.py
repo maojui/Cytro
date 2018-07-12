@@ -6,7 +6,6 @@ libnum - Python library for some numbers functions:
   - elliptic curve cryptography functions
 """
 
-from .common import *
 from .hash import *
 from .abbr import *
 from .formula import *
