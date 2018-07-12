@@ -74,4 +74,13 @@ def b2s(b):
         ret.append(chr(int(b[pos:pos + 8], 2)))
     return ''.join(ret)
 
-
+def xor_string(s1,s2):
+    """
+    Exclusive OR (XOR) @s1, @s2 byte by byte
+    return the xor result with minimun length of s1,s2
+    """
+    if type(s1) != type(s2) :
+        raise TypeError('Input must be the same type, both str or bytes.')
+    if type(s1) == type(s2) == bytes :
+        return b''.join([byte(a^b) for a,b in zip(s1,s2)])
+    return ''.join([chr(ord(a) ^ ord(b)) for a,b in zip(s1,s2)])

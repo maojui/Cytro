@@ -6,9 +6,7 @@ I integrate some source code collected from others great writeup, blog, project 
 
 I always use those methods to solve RSA problem, and hope this project will bring help for other CTF players, pull requests are always welcome.
 
------
-
-Redundancy Work :
+### Redundancy Work :
 
 * RSAKey((n,e,d)) - Just like Crypto.PublicKey.RSA, and add some lazy function. d is option, determine is pubkey or privkey
     * encrypt(m)         - return the encryption of message
@@ -20,7 +18,7 @@ Redundancy Work :
 * solve_crt(remainders, modules) - solve Chinese Remainder Theoreme
 * factordb(n) - API for getting well-known prime in FactorDB
 
-Factorization Method :
+### Factorization Method :
 
 * gcd_multiple_keys(keys) - GCD for Multiple keys
 * factordb(n) - Check the prime is factorize in FactorDB or not
@@ -32,20 +30,20 @@ Factorization Method :
 * pollard_pm1(n)    -   Pollards P-1 (Go through every primes)
 * pollard_brute(n)  -   Pollards P-1 (Go through every integer)
 
-RSA Specific Methods :
+### RSA Specific Methods :
 
 * Partial Key Recovery for n/2 bits of the private key
 * Chinese Remainder Theorem full private key recovery
 Decoding despite invalid Public Exponent
 
-Low Public Exponent : 
+### Low Public Exponent : 
 
 * hastad_broadcast(c, N) - Hastad's Broadcast Attack
 * common_modular(set1,set2) - Common Modulus, Common public Exponent [set:(N,e,c)]
 * franklin_reiter(n,e,c1,c2,r,a=1) - Franklin Reiter Related Message Attack :
 
 
-Information LOSS : (TODO)
+### Information LOSS : (TODO)
 
 * coppersmith           - Coppersmith Attack
 * coppersmith_shortpad  - Coppersmith Shortpad Attack
@@ -54,11 +52,11 @@ Information LOSS : (TODO)
 * partial_d()           - Known Partial bits of d, recover.
 * recover_key()         - Known Partial bits of d, recover.
 
-Forge Signature :
+### Forge Signature :
 
 * bleichenbacher_06     - Attack on (e=3) python-rsa signature.
 
-Others :
+### Others :
 
 noveltyprimes(n)
 smallq(n)

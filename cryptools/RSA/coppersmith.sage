@@ -138,88 +138,88 @@ def coppersmith_howgrave_univariate(pol, modulus, beta, mm, tt, XX):
 # Test on Stereotyped Messages
 ##########################################    
 
-print "//////////////////////////////////"
-print "// TEST 1"
-print "////////////////////////////////"
+# print "//////////////////////////////////"
+# print "// TEST 1"
+# print "////////////////////////////////"
 
-# RSA gen options (for the demo)
-length_N = 1024  # size of the modulus
-Kbits = 200      # size of the root
-e = 3
+# # RSA gen options (for the demo)
+# length_N = 1024  # size of the modulus
+# Kbits = 200      # size of the root
+# e = 3
 
-# RSA gen (for the demo)
-p = next_prime(2^int(round(length_N/2)))
-q = next_prime(p)
-N = p*q
-ZmodN = Zmod(N);
+# # RSA gen (for the demo)
+# p = next_prime(2^int(round(length_N/2)))
+# q = next_prime(p)
+# N = p*q
+# ZmodN = Zmod(N);
 
-# Create problem (for the demo)
-K = ZZ.random_element(0, 2^Kbits)
-Kdigits = K.digits(2)
-M = [0]*Kbits + [1]*(length_N-Kbits); 
-for i in range(len(Kdigits)):
-    M[i] = Kdigits[i]
-M = ZZ(M, 2)
-C = ZmodN(M)^e
+# # Create problem (for the demo)
+# K = ZZ.random_element(0, 2^Kbits)
+# Kdigits = K.digits(2)
+# M = [0]*Kbits + [1]*(length_N-Kbits); 
+# for i in range(len(Kdigits)):
+#     M[i] = Kdigits[i]
+# M = ZZ(M, 2)
+# C = ZmodN(M)^e
 
-# Problem to equation (default)
-P.<x> = PolynomialRing(ZmodN) #, implementation='NTL')
-pol = (2^length_N - 2^Kbits + x)^e - C
-dd = pol.degree()
+# # Problem to equation (default)
+# P.<x> = PolynomialRing(ZmodN) #, implementation='NTL')
+# pol = (2^length_N - 2^Kbits + x)^e - C
+# dd = pol.degree()
 
-# Tweak those
-beta = 1                                # b = N
-epsilon = beta / 7                      # <= beta / 7
-mm = ceil(beta**2 / (dd * epsilon))     # optimized value
-tt = floor(dd * mm * ((1/beta) - 1))    # optimized value
-XX = ceil(N**((beta**2/dd) - epsilon))  # optimized value
+# # Tweak those
+# beta = 1                                # b = N
+# epsilon = beta / 7                      # <= beta / 7
+# mm = ceil(beta**2 / (dd * epsilon))     # optimized value
+# tt = floor(dd * mm * ((1/beta) - 1))    # optimized value
+# XX = ceil(N**((beta**2/dd) - epsilon))  # optimized value
 
-# Coppersmith
-start_time = time.time()
-roots = coppersmith_howgrave_univariate(pol, N, beta, mm, tt, XX)
+# # Coppersmith
+# start_time = time.time()
+# roots = coppersmith_howgrave_univariate(pol, N, beta, mm, tt, XX)
 
-# output
-print "\n# Solutions"
-print "we want to find:",str(K)
-print "we found:", str(roots)
-print("in: %s seconds " % (time.time() - start_time))
-print "\n"
+# # output
+# print "\n# Solutions"
+# print "we want to find:",str(K)
+# print "we found:", str(roots)
+# print("in: %s seconds " % (time.time() - start_time))
+# print "\n"
 
-############################################
-# Test on Factoring with High Bits Known
-##########################################
-print "//////////////////////////////////"
-print "// TEST 2"
-print "////////////////////////////////"
+# ############################################
+# # Test on Factoring with High Bits Known
+# ##########################################
+# print "//////////////////////////////////"
+# print "// TEST 2"
+# print "////////////////////////////////"
 
-# RSA gen
-length_N = 1024;
-p = next_prime(2^int(round(length_N/2)));
-q = next_prime( round(pi.n()*p) );
-N = p*q;
+# # RSA gen
+# length_N = 1024;
+# p = next_prime(2^int(round(length_N/2)));
+# q = next_prime( round(pi.n()*p) );
+# N = p*q;
 
-# qbar is q + [hidden_size_random]
-hidden = 200;
-diff = ZZ.random_element(0, 2^hidden-1)
-qbar = q + diff; 
+# # qbar is q + [hidden_size_random]
+# hidden = 200;
+# diff = ZZ.random_element(0, 2^hidden-1)
+# qbar = q + diff; 
 
-F.<x> = PolynomialRing(Zmod(N), implementation='NTL'); 
-pol = x - qbar
-dd = pol.degree()
+# F.<x> = PolynomialRing(Zmod(N), implementation='NTL'); 
+# pol = x - qbar
+# dd = pol.degree()
 
-# PLAY WITH THOSE:
-beta = 0.5                             # we should have q >= N^beta
-epsilon = beta / 7                     # <= beta/7
-mm = ceil(beta**2 / (dd * epsilon))    # optimized
-tt = floor(dd * mm * ((1/beta) - 1))   # optimized
-XX = ceil(N**((beta**2/dd) - epsilon)) # we should have |diff| < X
+# # PLAY WITH THOSE:
+# beta = 0.5                             # we should have q >= N^beta
+# epsilon = beta / 7                     # <= beta/7
+# mm = ceil(beta**2 / (dd * epsilon))    # optimized
+# tt = floor(dd * mm * ((1/beta) - 1))   # optimized
+# XX = ceil(N**((beta**2/dd) - epsilon)) # we should have |diff| < X
 
-# Coppersmith
-start_time = time.time()
-roots = coppersmith_howgrave_univariate(pol, N, beta, mm, tt, XX)
+# # Coppersmith
+# start_time = time.time()
+# roots = coppersmith_howgrave_univariate(pol, N, beta, mm, tt, XX)
 
-# output
-print "\n# Solutions"
-print "we want to find:", qbar - q
-print "we found:", roots
-print("in: %s seconds " % (time.time() - start_time))
+# # output
+# print "\n# Solutions"
+# print "we want to find:", qbar - q
+# print "we found:", roots
+# print("in: %s seconds " % (time.time() - start_time))

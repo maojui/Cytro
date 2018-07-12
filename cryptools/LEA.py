@@ -63,11 +63,11 @@
 
     >>> import LEA
     >>> sha = LEA.new('sha1')
-    >>> print sha.extend('file', 'hello', 10, '52e98441017043eee154a6d1af98c5e0efab055c')
+    >>> print(sha.extend('file', 'hello', 10, '52e98441017043eee154a6d1af98c5e0efab055c'))
     'hello\x80\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00
     \x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00
     \x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00xfile'
-    >>> print sha.hexdigest()
+    >>> print(sha.hexdigest())
     c60fa7de0860d4048a3bfb36b70299a95e6587c9
 
    The unknown secret (of length 10), that when hashed appended with 'hello' produces

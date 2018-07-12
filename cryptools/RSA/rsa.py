@@ -12,12 +12,14 @@ import re
 
 class RSAKey():
     
-    def __init__(self,tup):
+    def __init__(self,tup,print_out=False):
         """
         Crypto.PublicKey.RSA.construct(tup)
-            tup : (n,e) for public key
-                : (n,e,d) for private key
+            @tup : (n,e) for public key
+                 : (n,e,d) for private key
+            @print_out : default is False, True for print out n,e,d, ... content.
         """
+        self.print_out = print_out
         self.key = RSA.construct(tup)
         self.copy_val_to_object()
         self._print()
@@ -26,6 +28,7 @@ class RSAKey():
         """
         input p,q calculate d, invmod(e,phi)
         """
+        d = self.cal_private(self.e,p,q)
         _key = RSA.construct((self.key.n,self.key.e,d))
         if pow(2,_key.e*_key.d,_key.n) == 2 and _key.has_private():
             print("[+] Success.")
@@ -42,19 +45,23 @@ class RSAKey():
             f.write(self.key.exportKey())
 
     def _print(self):
-        print("[+] Modular(n)  : {}".format(self.key.n))
-        print("[+] Public Exponent(e) : {}".format(self.key.e))
-        if self.key.has_private():
-            print("[+] Private exponent(d)  : {}".format(self.key.d))
-            print("[+] First factor (p) : {}".format(self.key.p))
-            print("[+] Second factor (q) : {}".format(self.key.q))
-            print("[+] CRT coefficient (u) : {}".format(self.key.u))
+        if self.print_out:
+            print("[+] Modular(n)  : {}".format(self.key.n))
+            print("[+] Public Exponent(e) : {}".format(self.key.e))
+            if self.key.has_private():
+                print("[+] Private exponent(d)  : {}".format(self.key.d))
+                print("[+] First factor (p) : {}".format(self.key.p))
+                print("[+] Second factor (q) : {}".format(self.key.q))
+                print("[+] CRT coefficient (u) : {}".format(self.key.u))
     
     def encrypt(self,plaintext):
-        return self.key.encrypt(plaintext,'')
+        return pow(ciphertext,self.e,self.n)
     
     def decrypt(self,ciphertext):
-        return self.key.decrypt(ciphertext)
+        """
+        ???
+        """
+        return pow(ciphertext,self.d,self.n)
 
     def copy_val_to_object(self):
         try :
@@ -409,6 +416,7 @@ def factordb(n):
                     tsoup = BeautifulSoup(temp1.text,'html.parser')
                     temp2 = requests.get('http://factordb.com/'+ tsoup.select('td')[12].a['href'])
                     tsoup2 = BeautifulSoup(temp2.text,'html.parser')
+                    
                     for dnum in tsoup2.select('td')[-1].strings:
                         factor += dnum.strip('\n')
                     break

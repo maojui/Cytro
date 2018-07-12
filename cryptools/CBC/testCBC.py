@@ -1,6 +1,6 @@
 
 from cryptools import *
-from CBCExploit import PaddingOracle
+from PaddingOracle import PaddingOracle
 from pwn import *
 
 HOST = 'localhost'

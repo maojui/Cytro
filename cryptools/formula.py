@@ -6,14 +6,26 @@ import operator
 from functools import reduce
 
 def grey_code(n):
+    """ 
+    Encode grey code :
+        Enter a value @n, return the correspond value in grey code. 
+    """
     return n ^ (n >> 1)
 
 def rev_grey_code(g):
+    """ 
+    Decode grey code :
+        Enter a number @g, return the vaule before encode to grey code. 
+    """
     n = 0
     while g:
         n ^= g
         g >>= 1
     return n
+
+def hamming_weight(x):
+    """ Hamming Weight, count 1s for number in binary. """
+    return bin(x).count('1')
 
 def factorial(n):
     res = 1
@@ -54,7 +66,10 @@ def randint_bits(size):
     return random.randint(low, hi)
 
 def ceil(x, y):
-    return x / y + (x % y != 0)
+    """
+    Input @x,@y, 
+    return the smallest Integer >= x/y"""
+    return x // y + (x % y != 0)
 
 def nroot(x, n):
     """
@@ -163,8 +178,11 @@ def extract_prime_power(a, p):
 
 
 def get_prime(n):
+    """ 
+    High speed to generate all primes which is smaller than n.
+    http://stackoverflow.com/questions/2068372/fastest-way-to-list-all-primes-below-n/3035188#3035188 
+    """
     from gmpy2 import mpz
-    """ http://stackoverflow.com/questions/2068372/fastest-way-to-list-all-primes-below-n/3035188#3035188 """
     n, correction = n-n%6+6, 2-(n%6>1)
     sieve = [True] * mpz(n/3)
     for i in range(1,mpz(n**0.5/3)+1):
