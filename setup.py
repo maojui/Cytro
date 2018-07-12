@@ -21,6 +21,7 @@ setup(name=__name__,
     install_requires=[
         'pycrypto==2.6.1',
         'pillow==4.3.0',
+        'sympy==1.0.0',
     ],
     classifiers=['Natural Language :: Chinese',
         'License :: OSI Approved :: MIT License',
