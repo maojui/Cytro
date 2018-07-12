@@ -21,7 +21,7 @@ def get_masks(sbox,bias=0,dumb=True):
             bias = sum((bin(x&insum).count('1') - bin(sbox[x]&outsum).count('1')) % 2 for x in range(256)) - 128
             if abs(bias) > 50:
                 pairs.append((insum,outsum,bias))
-                print('+'.join([f'x{i}' for i in range(8) if insum&(2**i)]) + ' -> ' + '+'.join([f'y{i}' for i in range(8) if outsum&(2**i)]),bias) if not dumb else None
+                print('+'.join(['x{i}'.format(i) for i in range(8) if insum&(2**i)]) + ' -> ' + '+'.join(['y{i}'.format(i) for i in range(8) if outsum&(2**i)]),bias) if not dumb else None
     return pairs
 
 # compute the linear approximation for a given "input = output" equation

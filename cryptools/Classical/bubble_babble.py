@@ -88,14 +88,18 @@ def bb_encode(s):
     buf, c, l = 'x', 1, len(s)
     for i in range(0, l + 2, 2):
         if i >= l:
-            buf += f'{BB_VOWELS[c % 6]}{BB_CONSONANTS[16]}{BB_VOWELS[c // 6]}'
+            buf += '{}{}{}'.format( BB_VOWELS[c % 6],
+                                    BB_CONSONANTS[16],
+                                    BB_VOWELS[c // 6])
             break
         b1 = ord(s[i])
-        buf += f'{BB_VOWELS[(((b1 >> 6) & 3) + c) % 6]}{BB_CONSONANTS[(b1 >> 2) & 15]}{BB_VOWELS[((b1 & 3) + (c // 6)) % 6]}'
+        buf += '{}{}{}'.format( BB_VOWELS[(((b1 >> 6) & 3) + c) % 6],
+                                BB_CONSONANTS[(b1 >> 2) & 15],
+                                BB_VOWELS[((b1 & 3) + (c // 6)) % 6])
         if i + 1 >= l:
             break
         b2 = ord(s[i + 1])
-        buf += f'{BB_CONSONANTS[(b2 >> 4) & 15]}-{BB_CONSONANTS[b2 & 15]}'
+        buf += '{}-{}'.format(BB_CONSONANTS[(b2 >> 4) & 15],BB_CONSONANTS[b2 & 15])
         c = (c * 5 + b1 * 7 + b2) % 36
     buf += 'x'
     return buf

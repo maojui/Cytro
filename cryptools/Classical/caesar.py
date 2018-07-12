@@ -14,7 +14,7 @@ def break_caesar(ctext):
     scores = []
     for i in range(26):
         scores.append((fitness.score(Caesar(i).decipher(ctext)),i))
-    print(f'best candidate with key (a,b) = {str(max_key[1])}:')
+    print('best candidate with key (a,b) = {}:'.format(str(max_key[1])))
     print(Caesar(max_key[1]).decipher(ctext))
     return max(scores)
 
@@ -27,6 +27,6 @@ def brute(ctext):
     ptxt = []
     for i in range(26):
         ptxt.append(Caesar(i).decipher(ctext))
-        print(f'{i:02} : {ptxt[i]}'.format(i))
+        print('{i:02} : {}'.format(i,ptxt[i]))
     return ptxt
     

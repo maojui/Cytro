@@ -172,7 +172,7 @@ def pollard_rho(N):
     factor, cycle = 1,1    
     x, fixed = 2,2
     while factor == 1:
-        print(f'Pollard rho cycle : {cycle}')
+        print('Pollard rho cycle : {}'.format(cycle))
         count = 1
         cycle *= 2
         while count <= cycle and factor <= 1:
@@ -388,7 +388,7 @@ def factordb(n):
     from functools import reduce
         
     
-    url = f'http://factordb.com/index.php?query={n}'
+    url = 'http://factordb.com/index.php?query={}'.format(n)
     td = BeautifulSoup(requests.get(url).text,'html.parser').select('td')
     states = list(td[11].strings)[0].strip(" ")
     print({
