@@ -1,0 +1,7 @@
+*.pyc
+dist
+build
+MANIFEST
+__pycache__
+Integration/*
+*/cytro/sage/*.sage.py
