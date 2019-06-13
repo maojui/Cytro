@@ -118,7 +118,7 @@ def non_consecutive_keystream(sequence, dist, keylength=0):
     print(poly,n,f)
     sequence = sequence[:n]
     period = (1<<n) - 1
-    taps = list(f)[:-1]
+    taps = sorted(list(f))[:-1]
     lfsr = LFSR(sequence,taps)
     # return lfsr 
     # if k <= 40 :

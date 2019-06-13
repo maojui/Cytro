@@ -4,7 +4,8 @@ import operator
 import subprocess
 import os
 from itertools import product
-from cytro import sageworks
+from . import sageworks
+from .sageworks import *
 from .modular import *
 
 def has_sqrtmod(a, factors=None):
@@ -69,7 +70,7 @@ def has_sqrtmod_prime_power(a, p, n=1):
 
     if p == 2:  # power of 2
         return a % 8 == 1
-    return jacobi(a, p) == 1
+    return legendre(a, p) == 1
 
 
 def sqrtmod_prime_power(a, p, k=1):
@@ -95,12 +96,12 @@ def sqrtmod_prime_power(a, p, k=1):
         if a == 1:
             return (1, p-1) if p != 2 else (1,)
 
-        if jacobi(a, p) == -1:
+        if legendre(a, p) == -1:
             raise ValueError("No square root for %d (mod %d)" % (a, p))
 
         while True:
             b = random.randint(1, p - 1)
-            if jacobi(b, p) == -1:
+            if legendre(b, p) == -1:
                 break
 
         pow2, t = extract_prime_power(p - 1, 2)
@@ -222,12 +223,12 @@ def sqrtmod_prime_power(a, p, k=1):
 
 def legendre(a, n):
     """
-    Return Jacobi symbol (or Legendre symbol if n is prime)
+    Return legendre symbol (or Legendre symbol if n is prime)
     """
     s = 1
     while True:
-        if n < 1: raise ValueError("Too small module for Jacobi symbol: " + str(n))
-        if n & 1 == 0: raise ValueError("Jacobi is defined only for odd modules")
+        if n < 1: raise ValueError("Too small module for legendre symbol: " + str(n))
+        if n & 1 == 0: raise ValueError("legendre is defined only for odd modules")
         if n == 1: return s
         a = a % n
         if a == 0: return 0

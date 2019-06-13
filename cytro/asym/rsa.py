@@ -138,8 +138,8 @@ class WienerAttack(object):
         self.q = None
         sys.setrecursionlimit(100000)
         frac = self.rational_to_contfrac(e, n)
-        convergents = self.convergents_from_contfrac(frac)
-        self.solve()
+        self.convergents = self.convergents_from_contfrac(frac)
+        self.solve(n,e)
     
     def rational_to_contfrac (self, x, y):
         a = x//y
@@ -191,8 +191,8 @@ class WienerAttack(object):
                 return x
             x = y
     
-    def solve(self):
-        for (k,d) in convergents:
+    def solve(self,n,e):
+        for (k,d) in self.convergents:
             if k!=0 and (e*d-1)%k == 0:
                 phi = (e*d-1)//k
                 s = n - phi + 1

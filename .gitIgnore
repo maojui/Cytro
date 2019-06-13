@@ -4,4 +4,5 @@ build
 MANIFEST
 __pycache__
 Integration/*
-*/cytro/sage/*.sage.py
+cytro/sage/*.sage.py
+cytro.egg-info

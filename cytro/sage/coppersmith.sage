@@ -11,7 +11,6 @@ def coppersmith(N,e,known_m,c,epsilon=1/30):
     roots = pol.small_roots(epsilon=1/30)
     return roots
 
-
 # N = int(sys.argv[1])
 # e = int(sys.argv[2])
 # known_m = int(sys.argv[3])     # known highbits
