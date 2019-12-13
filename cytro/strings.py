@@ -2,6 +2,20 @@
 import binascii
 import io
 
+def chunk(s, size, padding=None) :
+    pad = ''
+    if padding != None :
+        pad_size = size - (len(s) % size)
+        if ( type(padding) == str or type(padding) == bytes ) :
+            if len(padding) == 1 :
+                pad = padding * pad_size
+            elif len(padding) == pad_size :
+                pad = padding
+            else :
+                raise TypeError(f"Error padding size, {pad_size} bytes leave.")
+            s += pad
+    return [s[i:i+size] for i in range(0,len(s),size)]
+
 def len_in_bits(n):
     """
     Return number of bits in binary representation of @n.
@@ -43,6 +57,14 @@ def n2s(n,byteorder='big'):
     """
     length = (len(hex(n))-1)//2
     return int(n).to_bytes(length=length,byteorder=byteorder)
+
+def s2B(ss):
+    """
+    Switch string and bytes.
+    """
+    if type(ss) == bytes :
+        return ss
+    return bytes([ord(c) for c in ss])
 
 def s2b(s):
     """

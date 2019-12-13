@@ -29,4 +29,23 @@ def brute(ctext):
         ptxt.append(Caesar(i).decipher(ctext))
         print('{i:02} : {}'.format(i,ptxt[i]))
     return ptxt
+
+
+class ExCaesar():
     
+    def __init__(self, init="a", base=26):
+        self.init = init
+        self.base = base
+        self._list = ''.join([chr(ord(init) + i) for i in range(base)])
+    
+    def decrypt(self, cipher, key):
+        if not key < self.base :
+            raise ValueError("key is not in the list.")
+        p = ''
+        
+        for c in cipher :
+            if c in self._list:
+                p += chr(ord(self.init) + ((ord(c)-ord(self.init)) + key) % self.base)
+            else :
+                p += c
+        return p

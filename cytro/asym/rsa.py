@@ -1,6 +1,8 @@
 #-*- coding:utf-8 -*-
 import os
+
 from .. import sageworks
+from ..sageworks import *
 from ..modular import invmod
 from ..formula import gcd, get_primes, nroot
 
@@ -201,6 +203,7 @@ class WienerAttack(object):
                     t = self.is_perfect_square(discr)
                     if t!=-1 and (s+t)%2==0:
                         self.d = d
+                        print(self.d)
                         x = Symbol('x')
                         roots = solve(x**2 - s*x + n, x)
                         if len(roots) == 2:
@@ -276,7 +279,7 @@ def pollard_pm1(N,prange=10000000):
     """
     if isPrime(N):
         return N
-    test_p = iter(get_prime(prange))
+    test_p = iter(get_primes(prange))
     a = 2
     while True:
         try :
