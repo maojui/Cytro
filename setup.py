@@ -19,7 +19,7 @@ setup(name=__name__,
     install_requires=[
         'pycipher==0.5.2',
         'pycrypto==2.6.1',
-        'pillow==4.3.0',
+        'pillow==6.2.0',
         'sympy==1.0.0',
     ],
     classifiers=['Natural Language :: Chinese',
