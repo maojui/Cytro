@@ -2,7 +2,7 @@ import sys
 from setuptools import setup, find_packages
 
 __name__ = 'cytro'
-__version__ = '0.1.2'
+__version__ = '0.2.1'
 __author__ = 'Neptune (maojui0427@gmail.com)'
 __license__ = 'MIT'
 
@@ -17,10 +17,10 @@ setup(name=__name__,
     packages=find_packages(),
     provides=['cytro'],
     install_requires=[
-        'pycipher==0.5.2',
-        'pycrypto==2.6.1',
-        'pillow==4.3.0',
-        'sympy==1.0.0',
+        'pycipher>=0.5.2',
+        'pycrypto>=2.6.1',
+        'pillow>=6.2.1',
+        'sympy>=1.4',
     ],
     classifiers=['Natural Language :: Chinese',
         'License :: OSI Approved :: MIT License',
