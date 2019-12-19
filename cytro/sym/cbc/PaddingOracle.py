@@ -2,23 +2,6 @@ import re
 import logging as log
 from cytro import *
 
-# def block_xor(cipher, origin, to) :
-#     """   
-#     Give : 
-#         @cipher : CBC cipher 
-#         @origin : origin plaintext
-#         @to     : fake plaintext
-#     """
-#     print(cipher,origin,to)
-#     if len(cipher)%8 == 0 :
-#         raise Exception('Error block size')
-        
-#     if not len(cipher) == len(origin) == len(to):
-#         raise Exception('cipher, origin plaintext, fake plaintext must be the same length.')
-
-#     return xor_string(xor_string(cipher,origin), to)
-
-
 def xor(cipher, _from, _to):
     print("XOR", cipher, _from , _to)
     for target in [_from, _to] :
@@ -31,8 +14,8 @@ def xor(cipher, _from, _to):
 class PaddingOracle:
         
     def __init__(self, key_size=16):
-        if key_size % 8 != 0:
-            raise ValueError("Incorrect key length: %d", key_size)
+        # if key_size % 8 != 0:
+        #     raise ValueError("Incorrect key length: %d", key_size)
         self.key_size = key_size
 
     def oracle(self, payload, iv, previous_resp, **kwargs):
@@ -62,11 +45,10 @@ class PaddingOracle:
 
         #prepare blocks
         blocks = chunk(ciphertext,self.key_size)
-        print("FCDDDSFD", blocks)
+
         resp = None
         if iv != None:
             log.info("Set iv")
-            # iv = h2B(iv)
             iv = iv
             log.info("iv is : %s"%iv)
             blocks.insert(0,iv)
@@ -102,10 +84,7 @@ class PaddingOracle:
             payload_prefix = b''.join(blocks[:count_block-2])
             if FIRST_MODIFY :
                 FIRST_MODIFY = False
-                # print(position_known)
-                # print(blocks)
                 print("origin",blocks[-2])
-                # payload_modify = blocks[-2][:-position_known]+xor(blocks[-2][-position_known:],kp[:position_known],position_known+1)
                 payload_modify = blocks[-2][:-position_known] + xor(blocks[-2][-position_known:],kp[:position_known],position_known+1)
                 
             else :
@@ -124,8 +103,6 @@ class PaddingOracle:
                     payload = b''.join([payload_prefix, modified, payload_decrypt])
                     iv = payload[:self.key_size]
                     payload = payload[self.key_size:]
-                    # iv = s2h(payload[:self.key_size])
-                    # payload = s2h(payload[self.key_size:])
                     is_ok = False
 
                     correct, resp = self.oracle(payload=payload, iv=iv, previous_resp=resp, **kwargs)
