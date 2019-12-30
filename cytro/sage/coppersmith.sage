@@ -5,10 +5,10 @@ def long_to_bytes(data):
 def bytes_to_long(data):
     return int(data.encode('hex'), 16)
 
-def coppersmith(N,e,known_m,c,epsilon=1/30):
+def coppersmith(N,e,known_m,c,epsilon=1/50):
     P.<x> = PolynomialRing(Zmod(N), implementation='NTL')
     pol = (known_m + x)^e - c
-    roots = pol.small_roots(epsilon=1/30)
+    roots = pol.small_roots(epsilon=1/50)
     return roots
 
 # N = int(sys.argv[1])

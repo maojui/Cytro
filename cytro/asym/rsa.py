@@ -6,6 +6,7 @@ from ..sageworks import *
 from ..modular import invmod
 from ..formula import gcd, get_primes, nroot
 
+from tqdm import tqdm, trange
 from Crypto.PublicKey import RSA as _RSA
 from Crypto.Util.number import isPrime
 import requests
@@ -477,7 +478,6 @@ def franklin_reiter(n,e,c1,c2,r,a=1):
     
 def coppersmith(N,e,m,c,epsilon=1/30):
     """
-    
     If we know high bits of message, We can build a polynomial ((m + x)^e - c) mod N 
     and root of such polynomial(result of x) would be the difference between our known message and the encrypted message.
 
@@ -563,14 +563,88 @@ def factordb(n):
     assert n == reduce( lambda x, y: x*y, [pow(k,v) for k,v in pair.items()],1), 'factordb function failed.... try connect yourself.'
     return pair
 
-def LSB_Oracle(oracle):
-    L = 0
-    H = n
-    t = pow(2, e, n)
-    for _ in range(n.bit_length()):
-        c = (t * c) % n
-        if oracle(c) == 0:
-            H = (L + H) // 2
-        else:
-            L = (L + H) // 2
-    m = L
+def giantstep_babyStep(m, c, n, phi, group) :
+    """
+    With c = m^e % n 
+    given m, c, n, 𝜙(𝑛), and the target group 
+    This function will find out e % group in time O(√N).
+    
+    Give : 
+        @m : plaintxt data
+        @c : cipher data
+        @n : module
+        @phi : 𝜙(𝑛)
+        @group : A factor in phi
+
+    Return :
+        @e : what exponent this m is taken in group field.
+    """
+    # Raising to subgroup 
+    assert phi % group == 0, f"This phi didn't make {group} group"
+    e = phi // group
+    sqf = math.ceil(math.sqrt(group)) 
+    gf = pow(m, e, n) 
+    gsqf = pow(gf, sqf, n) 
+    table = {}
+    # Giant step 
+    ygna = pow(c, e, n) 
+    for a in range(sqf):
+        table[ygna] = a 
+        ygna = (ygna * gsqf) % n
+    # Baby step
+    gb = 1
+    for b in range(sqf): 
+        if gb in table :
+            a = table[gb]
+            ki = (b-a*sqf) % group
+            return ki
+        gb = (gb*gf)%n
+
+class LSBOracle:
+
+    def __init__(self, n, c, e, oracle_bitsize=1):
+        """
+            n is the module,
+        """
+        self.upper_bound = n
+        self.lower_bound = 0
+        self.n = n 
+        self.e = e 
+        self.c = c 
+        self.counter = 0
+        self.bitsize = oracle_bitsize
+    
+    def setsize(self, oracle_bitsize):
+        self.bitsize = oracle_bitsize
+
+    def update_bound(self, bits_val):
+        jump = 1 << self.bitsize
+        for i in range(1 << self.bitsize):
+            if bits_val == ((-self.n * i) % jump) :
+                upper_bound = self.upper_bound
+                lower_bound = self.lower_bound
+                self.upper_bound = lower_bound + ((upper_bound - lower_bound) * (i + 1) // jump + 1)
+                self.lower_bound = lower_bound + ((upper_bound - lower_bound) * i // jump)
+            print(f'bound: {self.lower_bound} ~ {self.upper_bound})')
+
+
+    def get_bound(self):
+        return (self.upper_bound,self.lower_bound)
+
+    def set_bound(self,bound):
+        self.upper_bound, self.lower_bound = bound
+
+    def start(self):
+        mul = pow(1 << self.bitsize, self.e, self.n)
+        try :
+            for _ in range(self.counter, len(bin(self.n)[2:]), self.bitsize ):
+                self.c = (mul * self.c) % self.n
+                bits_val = self.oracle(self.c)
+                self.update_bound(bits_val)
+                self.counter += self.bitsize
+        except :
+            print("Something stop Finding ...")
+        print(f'bound: {self.lower_bound} ~ {self.upper_bound})')
+
+    def oracle(self, c):
+        raise NotImplementedError
