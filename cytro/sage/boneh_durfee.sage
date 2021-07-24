@@ -1,5 +1,5 @@
 #!/usr/bin/env sage
-
+from sage.all import *
 # This code is taken from https://github.com/mimoo/RSA-and-LLL-attacks
 import time
 
@@ -42,7 +42,7 @@ def helpful_vectors(BB, modulus):
     for ii in range(BB.dimensions()[0]):
         if BB[ii,ii] >= modulus:
             nothelpful += 1
-    print nothelpful, "/", BB.dimensions()[0], " vectors are not helpful"
+    print(nothelpful, "/", BB.dimensions()[0], " vectors are not helpful")
 
 def matrix_overview(BB, bound):
     'display matrix picture with 0 and X'
@@ -54,7 +54,7 @@ def matrix_overview(BB, bound):
                 a += ' '
         if BB[ii, ii] >= bound:
             a += '~'
-        print a
+        print(a)
 
 def remove_unhelpful(BB, monomials, bound, current):
     '''
@@ -83,7 +83,7 @@ def remove_unhelpful(BB, monomials, bound, current):
             # if no other vectors end up affected
             # we remove it
             if affected_vectors == 0:
-                print "* removing unhelpful vector", ii
+                print("* removing unhelpful vector", ii)
                 BB = BB.delete_columns([ii])
                 BB = BB.delete_rows([ii])
                 monomials.pop(ii)
@@ -104,7 +104,7 @@ def remove_unhelpful(BB, monomials, bound, current):
                 # this helpful vector is not helpful enough
                 # compared to our unhelpful one
                 if affected_deeper and abs(bound - BB[affected_vector_index, affected_vector_index]) < abs(bound - BB[ii, ii]):
-                    print "* removing unhelpful vectors", ii, "and", affected_vector_index
+                    print("* removing unhelpful vectors", ii, "and", affected_vector_index)
                     BB = BB.delete_columns([affected_vector_index, ii])
                     BB = BB.delete_rows([affected_vector_index, ii])
                     monomials.pop(affected_vector_index)
@@ -180,7 +180,7 @@ def boneh_durfee_algorithm(pol, modulus, mm, tt, XX, YY):
         # reset dimension
         nn = BB.dimensions()[0]
         if nn == 0:
-            # print "failure"
+            # print("failure")
             return 0,0
 
     # check if vectors are helpful
@@ -191,15 +191,15 @@ def boneh_durfee_algorithm(pol, modulus, mm, tt, XX, YY):
     det = BB.det()
     bound = modulus^(mm*nn)
     if det >= bound:
-        # print "We do not have det < bound. Solutions might not be found."
-        # print "Try with highers m and t."
+        # print("We do not have det < bound. Solutions might not be found.")
+        # print("Try with highers m and t.")
         if debug:
             diff = (log(det) - log(bound)) / log(2)
             print("size det(L) - size e^(m*n) = ", floor(diff))
         if strict:
             return -1, -1
     # else:
-        # print "det(L) < e^(m*n) (good! If a solution exists < N^delta, it will be found)"
+        # print("det(L) < e^(m*n) (good! If a solution exists < N^delta, it will be found)")
 
     # display the lattice basis
     if debug:
@@ -220,7 +220,7 @@ def boneh_durfee_algorithm(pol, modulus, mm, tt, XX, YY):
     rr = pol1.resultant(pol2)
 
     if rr.is_zero() or rr.monomials() == [1]:
-        # print "the two first vectors are not independant"
+        # print("the two first vectors are not independant")
         return 0, 0
 
     rr = rr(q, q)
@@ -229,7 +229,7 @@ def boneh_durfee_algorithm(pol, modulus, mm, tt, XX, YY):
     soly = rr.roots()
 
     if len(soly) == 0:
-        # print "Your prediction (delta) is too small"
+        # print("Your prediction (delta) is too small")
         return 0, 0
 
     soly = soly[0][0]

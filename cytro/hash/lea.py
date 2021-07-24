@@ -82,7 +82,26 @@
 
 from re import match
 from math import ceil
-from cytro.strings import b2s
+
+def B2s(bs):
+    """
+    Switch bytes and string.
+    """
+    if type(bs) == type(b''):
+        return "".join(map(chr, bs))
+    else :
+        return bytes([ord(c) for c in bs])
+
+def b2s(b):
+    """
+    Binary to string.
+    """
+    ret = []
+    if type(b) == bytes:
+        b = B2s(b)
+    for pos in range(0, len(b), 8):
+        ret.append(chr(int(b[pos:pos + 8], 2)))
+    return ''.join(ret)
 
 __version__ = "0.1"
 
@@ -170,8 +189,6 @@ class Hash(object):
         # return ''.join([ chr(int(binary[a:a+8],base=2)) for a in range(0,len(binary),8) ])
         return b2s(binary)
 
-
-
     def __hashGetExtendLength(self, secretLength, knownData, appendData):
         '''Length function for hash length extension attacks'''
         # binary length (secretLength + len(knownData) + size of binarysize+1) rounded to a multiple of blockSize + length of appended data
@@ -195,9 +212,6 @@ class Hash(object):
         message = ''.join(bin(ord(i))[2:].rjust(8, '0') for i in message) + '1'    
         message += '0' * (((self._blockSize*7) - len(message) % self._b2) % self._b2) + length
         return message
-
-
-
 
 class SHA1 (Hash):
 

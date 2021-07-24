@@ -1,6 +1,8 @@
 #-*- coding:utf-8 -*-
-import binascii
 import io
+import random
+import string
+import binascii
 
 def chunk(s, size, padding=None) :
     pad = ''
@@ -15,6 +17,9 @@ def chunk(s, size, padding=None) :
                 raise TypeError(f"Error padding size, {pad_size} bytes leave.")
             s += pad
     return [s[i:i+size] for i in range(0,len(s),size)]
+
+def bits(n, length=0) :
+    return bin(n)[2:].rjust(length,'0') 
 
 def len_in_bits(n):
     """
@@ -96,6 +101,11 @@ def b2s(b):
     for pos in range(0, len(b), 8):
         ret.append(chr(int(b[pos:pos + 8], 2)))
     return ''.join(ret)
+
+
+def randstr(length):
+   letters = string.ascii_letters + string.digits
+   return ''.join(random.choice(letters) for i in range(length))
 
 def xor_string(s1,s2):
     """

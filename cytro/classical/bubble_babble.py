@@ -76,7 +76,12 @@ import re
 BB_VOWELS = 'aeiouy'
 BB_CONSONANTS = 'bcdfghklmnprstvzx'
 
-def bb_encode(s):
+__all__ = [
+    'bubble_babble_decode',
+    'bubble_babble_encode'
+]
+
+def bubble_babble_encode(s):
     """
     The encoding E(T) of a tuple T = <a, b, c, d, e> is then the string  
         V[a] C[b] V[c] C[d] `-' C[e]
@@ -104,7 +109,7 @@ def bb_encode(s):
     buf += 'x'
     return buf
 
-def bb_decode_sub(a1, a2, a3, offset, c):
+def bubble_babble_decode_sub(a1, a2, a3, offset, c):
     h = (a1 - (c % 6) + 6) % 6
     if h >= 4:
         return None, offset
@@ -116,7 +121,7 @@ def bb_decode_sub(a1, a2, a3, offset, c):
         return None, offset + 2
     return h << 6 | m << 2 | l, offset
 
-def bb_decode(s, exception = False):
+def bubble_babble_decode(s, exception = False):
     buf, c, l = '', 1, len(s)
     if l != 5 and l % 6 != 5:
         if exception: raise Exception('wrong bb "%s" length' % s)
@@ -147,13 +152,13 @@ def bb_decode(s, exception = False):
                     if exception: raise Exception('wrong bb "%s" at position %d (checksum: %d)' % (s, p + 2, c))
                     return None
             else:
-                b, wp = bb_decode_sub(t[0], t[1], t[2], p, c)
+                b, wp = bubble_babble_decode_sub(t[0], t[1], t[2], p, c)
                 if b is None:
                     if exception: raise Exception('wrong bb "%s" at position %d' % (s, wp))
                     return None
                 buf += chr(b)
         else:
-            b1, wp = bb_decode_sub(t[0], t[1], t[2], p, c)
+            b1, wp = bubble_babble_decode_sub(t[0], t[1], t[2], p, c)
             if b1 is None:
                 if exception: raise Exception('wrong bb "%s" at position %d' % (s, wp))
                 return None

@@ -3,6 +3,11 @@ dist
 build
 MANIFEST
 __pycache__
+.cache
+.DS_Store
+.pytest_cache
+.vscode/
+package-lock.json
 Integration/*
 cytro/sage/*.sage.py
 cytro.egg-info

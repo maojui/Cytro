@@ -1,5 +1,3 @@
-import sys
-
 def cube_root(c, q):
     F = FiniteField(q)
     R.<x> = PolynomialRing(F,'x')
@@ -23,19 +21,28 @@ def cube_roots(c,mod):
         g = GF(mod).multiplicative_generator()
         u = int(g ** ((mod-1)//3))
         r1 = int(cube_root(c, mod))
-        for i in xrange(3):
+        for i in range(3):
             rems.append( int(r1 * pow(u, i, mod) % mod) )
     for m in rems :
         if pow(m,3,p) != c :
             print('%d = m^3 mod %d, m has no integer solutions.' % (c,p) )
             exit()
-    return [str(r).replace('L','') for r in rems]
+    return rems
 
 
 if __name__ == '__main__':
-    import sys
 
-    c = int(sys.argv[1])
-    p = int(sys.argv[2])
+    # Debug
+    # p = random_prime(2^128-1,False,2^127)
+    # x = randint(2^127,2^128) % p
+    # c = pow(x, 3, p)
+    # print(f"{x}^{3} mod {p} = {c}")
+    # rems = cube_roots(c%p, p)
+    # print(f'x = {rems}')
+    # assert x in rems
+
+    print("x^3 mod p = c")
+    c = int(input("c = "))
+    p = int(input("p = "))
     rems = cube_roots(c%p,p)
-    print(rems)
+    print(f"x = {rems}")

@@ -12,6 +12,14 @@ from Crypto.Util.number import isPrime
 import requests
 import re
 
+__all__ = [
+    'RSAKey', 'MultiPrimeRSA',
+    'gcd_multiple_keys','common_modular',
+    'pollard_rho','pollard_pm1','pollard_brute','williams_pp1',
+    'hastad_broadcast','wiener','fermat_factorization','noveltyprimes','mersenne_primes',
+    'smallq','factordb','giantstep_babyStep','LSBOracle'
+]
+
 class RSAKey():
     
     def __init__(self,tup,print_out=False):
@@ -133,7 +141,7 @@ from sympy import Symbol
 # A reimplementation of pablocelayes rsa-wiener-attack 
 # https://github.com/pablocelayes/rsa-wiener-attack/
 
-class WienerAttack(object):
+class _WienerAttack(object):
 
     def __init__(self, n, e):
         self.d = None
@@ -218,14 +226,14 @@ def gcd_multiple_keys(keys):
         @keys : (n,e)s in a list or something iterable.
         return RSAKeys if Ns have same prime between each.  
     """
-    keys = []
+    _keys = []
     for i,n in enumerate(keys) :
         for j,n2 in enumerate(keys):
             if not gcd(n,n2) == 1 and n != n2:
                 p = gcd(n,n2)
                 priv = RSAKey((n, pub.e, invmod(pub.e,(n//p-1)*(p-1))))
                 keys.append(priv)
-    return keys
+    return _keys
 
 
 def common_modular(set1,set2):
@@ -237,7 +245,7 @@ def common_modular(set1,set2):
     n1,e1,c1 = set1 
     n2,e2,c2 = set2 
     if n1 != n2 : 
-        print("[-] Common Modular Attack Fail, N1 != N2")
+        print("[-] Common Modular Attack Fail, n1 != n2")
         return
     if gcd(e1,e2) != 1 : 
         print("[-] Common Modular Attack Fail, gcd(e1,e2) != 1")
@@ -249,7 +257,6 @@ def common_modular(set1,set2):
     if b < 0 : t2 = invmod(t2,n2)
     return t1*t2 % n1
     
-
 def pollard_rho(N):
     """    
     For one of N's prime p, 
@@ -313,7 +320,7 @@ def pollard_brute(N):
         b += 1
 
 
-def hastad_broadcast(cipher,module):
+def hastad_broadcast_attack(cipher, module, exponent):
     """    
     Chinese Remainder
     If the same message, encrypt by same exponent but different module
@@ -324,7 +331,11 @@ def hastad_broadcast(cipher,module):
     
     if M^e < N1*N2*N3 : solved.
     """
-    return solve_crt(cipher,module)
+    assert len(cipher) == len(module), "Amount of (cipher, modulo) pair unmatch."
+    C = solve_crt(cipher,module)
+    m, root = nroot(C, exponent)
+    if root == True :
+        return m
 
 def wiener(N,e):
     """
@@ -337,7 +348,7 @@ def wiener(N,e):
     
     link : https://en.wikipedia.org/wiki/Wiener's_attack
     """
-    wa = WienerAttack(N,e)
+    wa = _WienerAttack(N,e)
     if wa.p == None :
         print("Wiener Attack Fail.")
         return None
@@ -627,20 +638,23 @@ class LSBOracle:
                 self.lower_bound = lower_bound + ((upper_bound - lower_bound) * i // jump)
             print(f'bound: {self.lower_bound} ~ {self.upper_bound})')
 
-
     def get_bound(self):
         return (self.upper_bound,self.lower_bound)
 
     def set_bound(self,bound):
         self.upper_bound, self.lower_bound = bound
 
+    def history(self):
+        return self.history
+        
     def start(self):
         mul = pow(1 << self.bitsize, self.e, self.n)
         try :
             for _ in range(self.counter, len(bin(self.n)[2:]), self.bitsize ):
-                self.c = (mul * self.c) % self.n
-                bits_val = self.oracle(self.c)
+                c = (mul * self.c) % self.n
+                bits_val = self.oracle(c)
                 self.update_bound(bits_val)
+                self.c = c
                 self.counter += self.bitsize
         except :
             print("Something stop Finding ...")

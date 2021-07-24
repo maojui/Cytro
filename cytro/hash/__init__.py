@@ -1,2 +1,2 @@
-from .collision import *
-from .lea import *
+
+from . import lea as LEA

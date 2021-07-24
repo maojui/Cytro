@@ -4,6 +4,13 @@ import urllib.parse
 from typing import Union, Callable
 from concurrent.futures import ThreadPoolExecutor
 
+__all__ = [
+    'base64_encode', 'base64_decode',
+    'urlencode', 'urldecode',
+    'padding_oracle',
+    'remove_padding', 'xor'
+]
+
 def xor(cipher, _from, _to):
     print("XOR", cipher, _from , _to)
     for target in [_from, _to] :
@@ -12,13 +19,6 @@ def xor(cipher, _from, _to):
         if  type(target) == bytes and len(target) == len(cipher):
             cipher = xor_string(cipher,target)
     return cipher
-
-__all__ = [
-    'base64_encode', 'base64_decode',
-    'urlencode', 'urldecode',
-    'padding_oracle',
-    'remove_padding'
-]
 
 def _to_bytes(data: Union[str, bytes]):
     if isinstance(data, str):

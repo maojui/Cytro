@@ -29,3 +29,5 @@ def coppersmith_shortpad(n,e,c1,c2) :
         c1, c2 = c2, c1
 
     return diff
+
+coppersmith_shortpad(n,e,c1,c2)

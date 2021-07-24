@@ -17,9 +17,9 @@ def small_fraction(n) :
                     if len(sr)>0:
                         p = int(phint - sr[0])
                         if n%p == 0:
-                            print p
+                            print(p)
                             break
         if p == 0:
-                print p
+                print(p)
     except:
-        print 0
+        print(0)

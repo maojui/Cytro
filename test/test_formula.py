@@ -9,7 +9,7 @@ class FormulaTest(unittest.TestCase):
     def test_factorize(self):
         n = 1
         for i in range(10):
-            ra = random.randint(1,30)
+            ra = random.randint(1,25)
             n *= getPrime(ra)
         fs = factorize(n)
         res = 1
@@ -20,7 +20,7 @@ class FormulaTest(unittest.TestCase):
     def test_nroot_true(self):
         x = 1
         n = random.randint(1,10)
-        f = getPrime(random.randint(1,30))
+        f = getPrime(random.randint(1,25))
         for i in range(n):
             x *= f
         val, root = nroot(x,n)

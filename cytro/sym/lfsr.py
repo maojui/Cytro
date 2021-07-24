@@ -110,14 +110,15 @@ def Berlekamp_Massey_algorithm(sequence):
 def known_keystream():
     pass
 
-def non_consecutive_keystream(sequence, dist, keylength=0):
+def non_consecutive_keystream(sequence, dist, polynomial=None, keylength=0):
     '''
     @sequence : first bit at the leftmost.
     '''
     poly, n, f = Berlekamp_Massey_algorithm(sequence)
     print(poly,n,f)
     sequence = sequence[:n]
-    period = (1<<n) - 1
+    if not polynomial :
+        polynomial = (1<<n) - 1
     taps = sorted(list(f))[:-1]
     lfsr = LFSR(sequence,taps)
     # return lfsr 
@@ -129,41 +130,41 @@ def non_consecutive_keystream(sequence, dist, keylength=0):
     # else :
     #     pass
     
-    assert gcd(dist,period) == 1
-    mi = invmod(dist,period)
+    assert gcd(dist,polynomial) == 1
+    mi = invmod(dist,polynomial)
 
     c = []
     for i in range(1<<n):
         c.append(lfsr.next())
-
+    
 
     if keylength == 0 :
         keystream = [None] * (1<<n)
         for i in range(1<<n):
-            keystream[i] = c[(i * mi) % period]
+            keystream[i] = c[(i * mi) % polynomial]
         print(Berlekamp_Massey_algorithm(keystream))
         return c, keystream
     else :
         keystream = [None] * keylength
         for i in range(keylength):
-            keystream[i] = c[(i * mi) % period]
+            keystream[i] = c[(i * mi) % polynomial]
         print(Berlekamp_Massey_algorithm(keystream))
         return c,keystream
     
     
     
 #  [0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 0, 1, 0, 1, 1]
-register = [1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0, 1, 0, 1, 1, 0, 0, 0, 0, 1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 1, 0, 1, 1, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 1, 1, 0, 0, 1, 0, 1, 1, 0, 1, 1, 0, 0, 1, 0, 1, 1, 1, 0, 0, 1, 0, 0, 1, 1, 1, 1, 1, 1, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 1, 0, 0, 0, 1, 0, 0, 1, 0]
-ans =   [1, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 0, 1, 0, 1, 1]
+# register = [1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0, 1, 0, 1, 1, 0, 0, 0, 0, 1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 1, 0, 1, 1, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 1, 1, 0, 0, 1, 0, 1, 1, 0, 1, 1, 0, 0, 1, 0, 1, 1, 1, 0, 0, 1, 0, 0, 1, 1, 1, 1, 1, 1, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 1, 0, 0, 0, 1, 0, 0, 1, 0]
+# ans =   [1, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 0, 1, 0, 1, 1]
 # https://crypto.stackexchange.com/questions/59856/find-a-lfsr-given-2n-or-more-non-consecutive-keystream-bits
-# period = pow(2,16) - 1
+# polynomial = pow(2,16) - 1
 
 # m = 8
-# mi = invmod(m,period)
+# mi = invmod(m,polynomial)
 # keystream = [None] * (len(binary)-6)
-# assert gcd(m,period) == 1
+# assert gcd(m,polynomial) == 1
 # for i in range(len(binary)-6):
 #     if i < 100 :
-#         print('b' + str(i), '= c' + str((i * mi) % period))
+#         print('b' + str(i), '= c' + str((i * mi) % polynomial))
 
-#     keystream[i] = seq[(i * mi) % period]
+#     keystream[i] = seq[(i * mi) % polynomial]

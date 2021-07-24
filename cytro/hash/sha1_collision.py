@@ -8,8 +8,7 @@ def sha1_collision(image1,image2) :
     '''
     Usage: input two image, open in bytes or just a string path
     
-    A reimplementation of sonickun sha1-collider
-    https://github.com/sonickun/sha1-collider/blob/master/collider.py
+    Original : sonickun/sha1-collider, https://github.com/sonickun/sha1-collider/blob/master/collider.py
     '''
     if type(image1) == str :
         img1 = open(image1, "rb").read()
